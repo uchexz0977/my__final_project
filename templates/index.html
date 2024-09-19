@@ -1,0 +1,59 @@
+{% extends 'base.html' %} {% block title %}Science and Nature Quiz{% endblock %}
+{% block content %}
+<div class="jumbotron">
+  <h2 class="display-4">{{ question }}</h2>
+</div>
+
+<form method="POST">
+  {% for answer in answers %}
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="radio"
+      name="answers"
+      id="answer{{ loop.index }}"
+      value="{{ answer }}"
+    />
+    <label class="form-check-label" for="answer{{ loop.index }}">
+      {{ answer }}
+    </label>
+  </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-primary mt-3">Submit Answer</button>
+</form>
+
+{% if message %}
+<div
+  class="alert {{'alert-success' if 'Correct!' in message else 'alert-danger'}}"
+  role="alert"
+>
+  {{ message }}
+</div>
+
+<a href="{{ url_for('next_question') }}" class="btn btn-primary"
+  >Next Question</a
+>
+{% endif %}
+
+<div class="mt-4">
+  <h4>
+    Correct Answers:
+    <span class="badge badge-success">{{ correct_count }}</span> out of
+    <span class="badge badge-info">{{ attempted_count }}</span>
+  </h4>
+</div>
+
+<div class="mt-4 mb-4">
+  <h5>Progress: {{ attempted_count }} / {{ total_questions }}</h5>
+  <div class="progress">
+    <div
+      class="progress-bar"
+      role="progressbar"
+      style="width: {{ (attempted_count / total_questions) * 100 }}%;"
+      aria-valuenow="{{ attempted_count }}"
+      aria-valuemin="0"
+      aria-valuemax="{{ total_questions }}"
+    ></div>
+  </div>
+</div>
+{% endblock %}
